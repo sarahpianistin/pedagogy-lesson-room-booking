@@ -458,7 +458,13 @@ function updateBtn() {
 
 // ─── 예약 저장 ───
 window.makeBooking = async () => {
-  if (!selDate || selSlot === null || !currentUser) return;
+  console.log('makeBooking 실행:', selDate, selSlot, currentUser?.uid);
+  if (!selDate || selSlot === null || !currentUser) {
+    console.log('조건 실패:', {selDate, selSlot, currentUser});
+    showToast('❌ 날짜, 시간, 로그인 확인해주세요');
+    return;
+  }
+
   try {
     const docId = `${selDate}_${selSlot}`;
     await setDoc(doc(db, 'bookings', docId), {
