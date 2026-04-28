@@ -220,7 +220,7 @@
         <div class="legend-item"><div class="legend-dot" style="background:#ddd;"></div>예약됨</div>
       </div>
     </div>
-    <button class="book-btn" id="book-btn" disabled onclick="makeBooking()">날짜와 시간을 선택하세요</button>
+<button class="book-btn" id="book-btn" disabled>날짜와 시간을 선택하세요</button>
   </div>
 
   <!-- 내 예약 탭 -->
@@ -448,7 +448,12 @@ function updateBtn() {
   if (selDate && selSlot !== null) {
     btn.disabled = false;
     btn.textContent = `${SLOTS[selSlot]} 예약하기`;
-  } else { btn.disabled = true; btn.textContent = '날짜와 시간을 선택하세요'; }
+    btn.onclick = makeBooking;
+  } else { 
+    btn.disabled = true; 
+    btn.textContent = '날짜와 시간을 선택하세요';
+    btn.onclick = null;
+  }
 }
 
 // ─── 예약 저장 ───
