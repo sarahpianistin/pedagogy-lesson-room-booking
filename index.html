@@ -3,243 +3,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>연습실 예약 시스템</title>
+<title>연습실 예약 · Pedagogy</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  body { background: #f5f5f7; min-height: 100vh; }
- 
-  #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-  .login-card { background: #fff; border-radius: 20px; padding: 40px 32px; width: 100%; max-width: 380px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
-  .login-logo { font-size: 40px; text-align: center; margin-bottom: 8px; }
-  .login-title { font-size: 22px; font-weight: 600; text-align: center; color: #1a1a1a; margin-bottom: 4px; }
-  .login-sub { font-size: 14px; color: #888; text-align: center; margin-bottom: 32px; }
-  .input-group { margin-bottom: 14px; }
-  .input-group label { font-size: 12px; font-weight: 500; color: #555; display: block; margin-bottom: 5px; }
-  .input-group input { width: 100%; border: 1px solid #e0e0e0; border-radius: 10px; padding: 11px 14px; font-size: 15px; outline: none; transition: border 0.15s; }
-  .input-group input:focus { border-color: #185FA5; }
-  .btn-primary { width: 100%; background: #185FA5; color: #fff; border: none; border-radius: 10px; padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; margin-top: 4px; }
-  .btn-primary:hover { opacity: 0.88; }
-  .btn-secondary { width: 100%; background: none; color: #185FA5; border: 1px solid #185FA5; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 10px; transition: background 0.15s; }
-  .btn-secondary:hover { background: #E6F1FB; }
-  .login-divider { text-align: center; font-size: 12px; color: #bbb; margin: 14px 0; }
-  .error-msg { color: #E24B4A; font-size: 12px; margin-top: 8px; text-align: center; display: none; }
- 
-  #app-screen { display: none; max-width: 480px; margin: 0 auto; min-height: 100vh; background: #f5f5f7; }
-  .app-header { background: #fff; padding: 16px 20px 12px; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
-  .app-header-top { display: flex; justify-content: space-between; align-items: center; }
-  .app-title { font-size: 18px; font-weight: 600; color: #1a1a1a; }
-  .app-sub { font-size: 12px; color: #888; margin-top: 1px; }
-  .user-badge { display: flex; align-items: center; gap: 8px; }
-  .avatar { width: 32px; height: 32px; border-radius: 50%; background: #B5D4F4; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #0C447C; }
-  .logout-btn { font-size: 12px; color: #888; cursor: pointer; border: none; background: none; padding: 4px 8px; border-radius: 6px; }
-  .logout-btn:hover { background: #f0f0f0; }
- 
-  .tab-nav { display: flex; background: #fff; border-bottom: 1px solid #eee; }
-  .tab-item { flex: 1; padding: 12px 4px; text-align: center; font-size: 12px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
-  .tab-item.active { color: #185FA5; border-bottom-color: #185FA5; font-weight: 500; }
-  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
- 
-  .tab-content { display: none; padding: 16px; }
-  .tab-content.active { display: block; }
- 
-  .card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 12px; }
-  .card-title { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 12px; }
-  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .cal-month { font-size: 15px; font-weight: 600; color: #1a1a1a; }
-  .cal-nav-btn { background: none; border: 1px solid #e0e0e0; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 16px; color: #555; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-  .cal-day-label { font-size: 11px; color: #aaa; text-align: center; padding: 4px 0; font-weight: 500; }
-  .cal-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 50%; cursor: pointer; color: #1a1a1a; position: relative; transition: background 0.1s; }
-  .cal-cell:hover:not(.past):not(.empty) { background: #f0f0f0; }
-  .cal-cell.today { background: #E6F1FB; color: #185FA5; font-weight: 600; }
-  .cal-cell.selected { background: #185FA5; color: #fff; font-weight: 600; }
-  .cal-cell.past { color: #ccc; cursor: default; }
+  :root {
+    --blue: #1a5fb4;
+    --blue-light: #e8f0fc;
+    --green: #1c8a5e;
+    --green-light: #d6f0e6;
+    --red: #c0392b;
+    --red-light: #fde8e6;
+    --border: #e5e7eb;
+    --text: #111827;
+    --text-sub: #6b7280;
+    --white: #ffffff;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: #f0f4f8; min-height: 100vh; color: var(--text); }
+
+  .header {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 14px 20px; position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .header-logo { font-size: 22px; }
+  .header-title { font-size: 16px; font-weight: 700; }
+  .header-sub { font-size: 11px; color: var(--text-sub); margin-top: 1px; }
+  .header-name {
+    font-size: 13px; color: var(--blue); font-weight: 600;
+    cursor: pointer; padding: 6px 14px;
+    border: 1.5px solid var(--blue); border-radius: 20px;
+    background: var(--blue-light); transition: opacity 0.15s;
+  }
+  .header-name:hover { opacity: 0.8; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200; padding: 20px;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--white); border-radius: 20px;
+    padding: 32px 28px; width: 100%; max-width: 360px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: popIn 0.2s ease;
+  }
+  @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-emoji { font-size: 36px; margin-bottom: 12px; }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.6; }
+  .modal input {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 13px 16px; font-size: 15px; font-family: inherit;
+    outline: none; transition: border 0.15s; margin-bottom: 12px;
+  }
+  .modal input:focus { border-color: var(--blue); }
+  .modal-btn {
+    width: 100%; background: var(--blue); color: var(--white);
+    border: none; border-radius: 10px; padding: 14px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: opacity 0.15s;
+  }
+  .modal-btn:hover { opacity: 0.88; }
+
+  .main { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+  .tabs {
+    display: flex; background: var(--white);
+    border-radius: var(--radius); padding: 4px; gap: 3px;
+    margin-bottom: 12px; box-shadow: var(--shadow);
+  }
+  .tab {
+    flex: 1; text-align: center; padding: 10px 6px;
+    font-size: 13px; font-weight: 500; color: var(--text-sub);
+    border-radius: 10px; cursor: pointer;
+    font-family: inherit; border: none; background: none;
+    transition: all 0.15s;
+  }
+  .tab.active { background: var(--blue); color: var(--white); font-weight: 700; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow);
+  }
+  .card-label { font-size: 11px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .cal-month { font-size: 16px; font-weight: 700; }
+  .cal-nav {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    width: 32px; height: 32px; cursor: pointer; font-size: 18px;
+    color: var(--text-sub); display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+  }
+  .cal-nav:hover { background: #f3f4f6; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-lbl { font-size: 11px; color: var(--text-sub); text-align: center; padding: 4px 0; font-weight: 500; }
+  .cal-cell {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; border-radius: 50%; cursor: pointer; position: relative;
+    transition: all 0.1s;
+  }
+  .cal-cell:hover:not(.past):not(.empty) { background: #f3f4f6; }
+  .cal-cell.today { background: var(--blue-light); color: var(--blue); font-weight: 700; }
+  .cal-cell.selected { background: var(--blue); color: var(--white); font-weight: 700; }
+  .cal-cell.past { color: #d1d5db; cursor: default; }
   .cal-cell.empty { cursor: default; }
-  .cal-cell.has-booking::after { content: ''; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: #1D9E75; }
-  .cal-cell.selected.has-booking::after { background: #9FE1CB; }
- 
-  .date-label { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
-  .slots-container { display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
-  .slot { display: flex; align-items: center; justify-content: space-between; border: 1px solid #e8e8e8; border-radius: 12px; padding: 10px 14px; cursor: pointer; transition: all 0.1s; }
-  .slot:hover:not(.booked):not(.my-slot) { border-color: #185FA5; background: #f8fbff; }
-  .slot.selected { border: 2px solid #185FA5; background: #E6F1FB; }
-  .slot.booked { background: #f9f9f9; cursor: not-allowed; }
-  .slot.my-slot { background: #E1F5EE; border-color: #5DCAA5; cursor: default; }
-  .slot-time { font-size: 13px; font-weight: 500; color: #1a1a1a; }
-  .slot.booked .slot-time { color: #bbb; }
-  .slot.my-slot .slot-time { color: #0F6E56; }
-  .slot.selected .slot-time { color: #185FA5; }
-  .slot-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
-  .badge-free { background: #EAF3DE; color: #3B6D11; }
-  .badge-booked { background: #f0f0f0; color: #aaa; }
-  .badge-mine { background: #E1F5EE; color: #0F6E56; }
-  .badge-sel { background: #E6F1FB; color: #185FA5; }
- 
-  .book-btn { width: 100%; background: #185FA5; color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: opacity 0.15s; }
-  .book-btn:hover:not(:disabled) { opacity: 0.88; }
-  .book-btn:disabled { background: #e0e0e0; color: #aaa; cursor: not-allowed; }
- 
-  .booking-item { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; }
-  .booking-info .booking-date { font-size: 14px; font-weight: 600; color: #1a1a1a; }
-  .booking-info .booking-time { font-size: 12px; color: #888; margin-top: 2px; }
-  .cancel-btn { background: #FCEBEB; color: #A32D2D; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; }
-  .cancel-btn:hover { background: #f7c1c1; }
-  .empty-msg { text-align: center; color: #aaa; font-size: 14px; padding: 40px 0; }
- 
-  .admin-tab-bar { display: flex; background: #eee; border-radius: 10px; padding: 3px; gap: 2px; margin-bottom: 14px; }
-  .admin-tab { flex: 1; text-align: center; padding: 8px; font-size: 12px; font-weight: 500; color: #888; border-radius: 8px; cursor: pointer; }
-  .admin-tab.active { background: #fff; color: #1a1a1a; }
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .stat-card { background: #fff; border-radius: 12px; padding: 14px; }
-  .stat-val { font-size: 24px; font-weight: 700; color: #1a1a1a; }
-  .stat-lbl { font-size: 11px; color: #888; margin-top: 2px; }
-  .admin-booking-item { background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; }
-  .admin-booking-row { display: flex; justify-content: space-between; align-items: center; }
-  .admin-booking-name { font-size: 13px; font-weight: 500; color: #1a1a1a; }
-  .admin-booking-detail { font-size: 12px; color: #888; margin-top: 2px; }
- 
-  .noti-item { background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
-  .noti-icon { font-size: 20px; flex-shrink: 0; }
-  .noti-text { font-size: 13px; color: #1a1a1a; line-height: 1.5; }
-  .noti-time { font-size: 11px; color: #aaa; margin-top: 2px; }
- 
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
-  .toast.show { opacity: 1; }
- 
-  .loading { text-align: center; color: #aaa; padding: 30px; font-size: 14px; }
-  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888; }
+  .cal-cell.has-dot::after {
+    content: ''; position: absolute; bottom: 3px;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--green);
+  }
+  .cal-cell.selected.has-dot::after { background: rgba(255,255,255,0.7); }
+
+  .date-heading { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  .slots-wrap { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; }
+  .slots-wrap::-webkit-scrollbar { width: 3px; }
+  .slots-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  .slot {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 11px 14px; cursor: pointer; transition: all 0.12s; background: var(--white);
+  }
+  .slot:hover:not(.booked):not(.mine) { border-color: var(--blue); background: var(--blue-light); }
+  .slot.selected { border-color: var(--blue); background: var(--blue-light); }
+  .slot.mine { border-color: var(--green); background: var(--green-light); cursor: default; }
+  .slot.booked { background: #f9fafb; cursor: not-allowed; }
+  .slot-time { font-size: 13px; font-weight: 500; }
+  .slot.booked .slot-time { color: #9ca3af; }
+  .slot.mine .slot-time { color: var(--green); font-weight: 600; }
+  .slot.selected .slot-time { color: var(--blue); font-weight: 600; }
+  .slot-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+  .b-free { background: #ecfdf5; color: var(--green); }
+  .b-sel { background: var(--blue-light); color: var(--blue); }
+  .b-mine { background: var(--green-light); color: var(--green); }
+  .b-booked { background: #f3f4f6; color: #9ca3af; }
+
+  .book-btn {
+    width: 100%; background: var(--blue); color: var(--white);
+    border: none; border-radius: var(--radius); padding: 15px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: all 0.15s; margin-bottom: 12px;
+  }
+  .book-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+  .book-btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; transform: none; }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 10px 0 2px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-sub); }
   .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .mine-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--white); border-radius: 10px; padding: 14px 16px;
+    margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+  .mine-date { font-size: 14px; font-weight: 600; }
+  .mine-time { font-size: 12px; color: var(--text-sub); margin-top: 3px; }
+  .cancel-btn {
+    background: var(--red-light); color: var(--red); border: none;
+    border-radius: 8px; padding: 7px 13px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background 0.15s; white-space: nowrap;
+  }
+  .cancel-btn:hover { background: #fbd5d2; }
+
+  .empty { text-align: center; color: #9ca3af; font-size: 14px; padding: 40px 0; }
+  .loading { text-align: center; color: #9ca3af; padding: 24px; font-size: 13px; }
+
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #111827; color: var(--white);
+    padding: 12px 22px; border-radius: 24px;
+    font-size: 14px; font-weight: 500; z-index: 999;
+    opacity: 0; transition: all 0.3s ease;
+    pointer-events: none; white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
- 
-<!-- 로그인 화면 -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">🎵</div>
-    <div class="login-title">연습실 예약</div>
-    <div class="login-sub">Pedagogy-Lesson Room Booking</div>
-    <div class="input-group">
-      <label>이메일</label>
-      <input type="email" id="login-email" placeholder="이메일 입력" />
-    </div>
-    <div class="input-group">
-      <label>비밀번호</label>
-      <input type="password" id="login-pw" placeholder="비밀번호 입력" id="login-pw" />
-    </div>
-    <div class="error-msg" id="login-error">이메일 또는 비밀번호를 확인해주세요.</div>
-    <button class="btn-primary" id="login-btn">로그인</button>
-    <div class="login-divider">또는</div>
-    <button class="btn-secondary" id="show-signup-btn">처음이세요? 회원가입</button>
- 
-    <div id="signup-form" style="display:none; margin-top:16px; border-top:1px solid #eee; padding-top:16px;">
-      <div class="input-group">
-        <label>이름</label>
-        <input type="text" id="signup-name" placeholder="이름 입력" />
-      </div>
-      <div class="input-group">
-        <label>이메일</label>
-        <input type="email" id="signup-email" placeholder="이메일 입력" />
-      </div>
-      <div class="input-group">
-        <label>비밀번호 (6자 이상)</label>
-        <input type="password" id="signup-pw" placeholder="비밀번호 입력" />
-      </div>
-      <div class="error-msg" id="signup-error"></div>
-      <button class="btn-primary" id="signup-btn">회원가입</button>
-      <button class="btn-secondary" id="hide-signup-btn">취소</button>
-    </div>
+
+<!-- 이름 입력 모달 -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-emoji">🎵</div>
+    <div class="modal-title">연습실 예약</div>
+    <div class="modal-sub">예약을 위해 이름을 입력해주세요.<br>입력한 이름으로 예약이 등록됩니다.</div>
+    <input type="text" id="name-input" placeholder="이름 입력 (예: 김지수)" maxlength="10" />
+    <button class="modal-btn" id="name-btn">시작하기 →</button>
   </div>
 </div>
- 
-<!-- 앱 화면 -->
-<div id="app-screen">
-  <div class="app-header">
-    <div class="app-header-top">
-      <div>
-        <div class="app-title">🎵 연습실 예약</div>
-        <div class="app-sub">Pedagogy-Lesson Room</div>
-      </div>
-      <div class="user-badge">
-        <div class="avatar" id="user-avatar">?</div>
-        <button class="logout-btn" id="logout-btn">로그아웃</button>
-      </div>
+
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">🎵</div>
+    <div>
+      <div class="header-title">연습실 예약</div>
+      <div class="header-sub">Pedagogy-Lesson Room</div>
     </div>
   </div>
- 
-  <div class="tab-nav">
-    <div class="tab-item active" data-tab="book"><span class="tab-icon">📅</span>예약</div>
-    <div class="tab-item" data-tab="mybookings"><span class="tab-icon">📋</span>내 예약</div>
-    <div class="tab-item" data-tab="admin"><span class="tab-icon">🛠</span>관리자</div>
-    <div class="tab-item" data-tab="noti"><span class="tab-icon">🔔</span>알림</div>
+  <div class="header-name" id="header-name">이름 입력</div>
+</div>
+
+<div class="main">
+  <!-- 탭 -->
+  <div class="tabs">
+    <button class="tab active" data-tab="book">📅 예약하기</button>
+    <button class="tab" data-tab="mine">📋 내 예약</button>
   </div>
- 
+
   <!-- 예약 탭 -->
-  <div class="tab-content active" id="tab-book">
+  <div class="tab-panel active" id="tab-book">
     <div class="card">
-      <div class="card-title">날짜 선택</div>
+      <div class="card-label">날짜 선택</div>
       <div class="cal-header">
-        <button class="cal-nav-btn" id="prev-month-btn">‹</button>
+        <button class="cal-nav" id="prev-btn">‹</button>
         <span class="cal-month" id="cal-month"></span>
-        <button class="cal-nav-btn" id="next-month-btn">›</button>
+        <button class="cal-nav" id="next-btn">›</button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
- 
+
     <div class="card">
-      <div class="date-label" id="selected-date-label">날짜를 선택해주세요</div>
-      <div class="card-title">시간 선택 (30분 단위)</div>
-      <div class="slots-container" id="slots-container">
+      <div class="date-heading" id="date-heading">날짜를 선택해주세요</div>
+      <div class="card-label">시간 선택 · 30분 단위</div>
+      <div class="slots-wrap" id="slots-wrap">
         <div class="loading">날짜를 먼저 선택해주세요</div>
       </div>
-      <div class="legend" style="margin-top:10px;">
-        <div class="legend-item"><div class="legend-dot" style="background:#185FA5;"></div>선택됨</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#1D9E75;"></div>내 예약</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ddd;"></div>예약됨</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>선택됨</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>내 예약</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d1d5db"></div>예약됨</div>
       </div>
     </div>
- 
+
     <button class="book-btn" id="book-btn" disabled>날짜와 시간을 선택하세요</button>
   </div>
- 
+
   <!-- 내 예약 탭 -->
-  <div class="tab-content" id="tab-mybookings">
-    <div id="my-bookings-list"><div class="loading">불러오는 중...</div></div>
-  </div>
- 
-  <!-- 관리자 탭 -->
-  <div class="tab-content" id="tab-admin">
-    <div class="admin-tab-bar">
-      <div class="admin-tab active" data-admin-tab="stats">통계</div>
-      <div class="admin-tab" data-admin-tab="all">전체 예약</div>
-    </div>
-    <div id="admin-stats-view">
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-val" id="stat-total">-</div><div class="stat-lbl">총 예약 건수</div></div>
-        <div class="stat-card"><div class="stat-val" id="stat-hours">-</div><div class="stat-lbl">총 사용 시간</div></div>
-        <div class="stat-card"><div class="stat-val" id="stat-today">-</div><div class="stat-lbl">오늘 예약</div></div>
-        <div class="stat-card"><div class="stat-val" id="stat-users">-</div><div class="stat-lbl">이용 인원</div></div>
-      </div>
-    </div>
-    <div id="admin-all-view" style="display:none;">
-      <div id="all-bookings-list"><div class="loading">불러오는 중...</div></div>
-    </div>
-  </div>
- 
-  <!-- 알림 탭 -->
-  <div class="tab-content" id="tab-noti">
-    <div id="noti-list"><div class="empty-msg">알림이 없습니다</div></div>
+  <div class="tab-panel" id="tab-mine">
+    <div id="mine-list"><div class="loading">불러오는 중...</div></div>
   </div>
 </div>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
- 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDbKe1LnPQ0I0FnWWmATNyck2RSL9_xrJE",
   authDomain: "pedagogy-lesson-room-booking.firebaseapp.com",
@@ -248,244 +269,175 @@ const firebaseConfig = {
   messagingSenderId: "268158400200",
   appId: "1:268158400200:web:1fe1bedbf753e08c2057fd"
 };
- 
+
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
- 
+
 // 상태
 const today = new Date();
 let cYear = today.getFullYear(), cMonth = today.getMonth();
 let selDate = null, selSlot = null;
-let currentUser = null;
+let userName = localStorage.getItem('booking-name') || '';
 let allBookings = {};
-let notiItems = [];
-let unsubscribe = null;
- 
-// 시간 슬롯 (09:00 ~ 22:00, 30분 단위)
+
+// 슬롯 생성 09:00~22:00
 const SLOTS = [];
 for (let h = 9; h < 22; h++) {
   SLOTS.push(`${String(h).padStart(2,'0')}:00 ~ ${String(h).padStart(2,'0')}:30`);
   SLOTS.push(`${String(h).padStart(2,'0')}:30 ~ ${String(h+1).padStart(2,'0')}:00`);
 }
- 
-function dk(date) {
-  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+
+function dk(y, m, d) {
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 }
- 
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
- 
-// ─── 이벤트 리스너 방식으로 모두 변경 (onclick 속성 제거) ───
- 
-// 로그인
-document.getElementById('login-btn').addEventListener('click', async () => {
-  const email = document.getElementById('login-email').value.trim();
-  const pw = document.getElementById('login-pw').value;
-  const errEl = document.getElementById('login-error');
-  errEl.style.display = 'none';
-  try {
-    await signInWithEmailAndPassword(auth, email, pw);
-  } catch(e) {
-    errEl.style.display = 'block';
-  }
-});
- 
-document.getElementById('login-pw').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') document.getElementById('login-btn').click();
-});
- 
-// 회원가입
-document.getElementById('show-signup-btn').addEventListener('click', () => {
-  document.getElementById('signup-form').style.display = 'block';
-});
-document.getElementById('hide-signup-btn').addEventListener('click', () => {
-  document.getElementById('signup-form').style.display = 'none';
-});
- 
-document.getElementById('signup-btn').addEventListener('click', async () => {
-  const name = document.getElementById('signup-name').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const pw = document.getElementById('signup-pw').value;
-  const errEl = document.getElementById('signup-error');
-  errEl.style.display = 'none';
-  if (!name) { errEl.textContent = '이름을 입력해주세요.'; errEl.style.display='block'; return; }
-  if (pw.length < 6) { errEl.textContent = '비밀번호는 6자 이상이어야 해요.'; errEl.style.display='block'; return; }
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, pw);
-    await updateProfile(cred.user, { displayName: name });
-    showToast('🎉 회원가입 완료! 환영해요!');
-    document.getElementById('signup-form').style.display = 'none';
-  } catch(e) {
-    errEl.textContent = e.code === 'auth/email-already-in-use' ? '이미 사용 중인 이메일이에요.' : '회원가입 실패. 다시 시도해주세요.';
-    errEl.style.display = 'block';
-  }
-});
- 
-// 로그아웃
-document.getElementById('logout-btn').addEventListener('click', async () => {
-  if (unsubscribe) unsubscribe();
-  await signOut(auth);
-});
- 
-// 달력 월 이동
-document.getElementById('prev-month-btn').addEventListener('click', () => changeMonth(-1));
-document.getElementById('next-month-btn').addEventListener('click', () => changeMonth(1));
- 
-// 탭 전환
-document.querySelectorAll('.tab-item').forEach(tabEl => {
-  tabEl.addEventListener('click', () => {
-    const name = tabEl.dataset.tab;
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    tabEl.classList.add('active');
-  });
-});
- 
-// 관리자 탭 전환
-document.querySelectorAll('.admin-tab').forEach(tabEl => {
-  tabEl.addEventListener('click', () => {
-    const tab = tabEl.dataset.adminTab;
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    tabEl.classList.add('active');
-    document.getElementById('admin-stats-view').style.display = tab === 'stats' ? 'block' : 'none';
-    document.getElementById('admin-all-view').style.display = tab === 'all' ? 'block' : 'none';
-  });
-});
- 
-// 예약 버튼 (핵심 수정: 직접 addEventListener 사용)
-document.getElementById('book-btn').addEventListener('click', () => {
-  makeBooking();
-});
- 
-// ─── 인증 상태 감지 ───
-onAuthStateChanged(auth, user => {
-  if (user) {
-    currentUser = user;
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app-screen').style.display = 'block';
-    const initials = (user.displayName || user.email).substring(0,2).toUpperCase();
-    document.getElementById('user-avatar').textContent = initials;
-    startListening();
-    renderCal();
+
+// 이름 모달
+function checkName() {
+  if (!userName) {
+    document.getElementById('modal').classList.remove('hidden');
+    setTimeout(() => document.getElementById('name-input').focus(), 100);
   } else {
-    currentUser = null;
-    allBookings = {};
-    selDate = null;
-    selSlot = null;
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('app-screen').style.display = 'none';
+    document.getElementById('modal').classList.add('hidden');
+    document.getElementById('header-name').textContent = userName;
   }
+}
+
+document.getElementById('name-btn').addEventListener('click', () => {
+  const val = document.getElementById('name-input').value.trim();
+  if (!val) { showToast('이름을 입력해주세요'); return; }
+  userName = val;
+  localStorage.setItem('booking-name', userName);
+  document.getElementById('header-name').textContent = userName;
+  document.getElementById('modal').classList.add('hidden');
+  renderMine();
 });
- 
-// ─── 실시간 데이터 수신 ───
-function startListening() {
-  const q = query(collection(db, 'bookings'), orderBy('createdAt', 'desc'));
-  unsubscribe = onSnapshot(q, snapshot => {
-    allBookings = {};
-    snapshot.forEach(d => {
-      const data = d.data();
-      if (!allBookings[data.date]) allBookings[data.date] = {};
-      allBookings[data.date][data.slot] = { user: data.userName, uid: data.uid, docId: d.id };
-    });
-    renderCal();
-    if (selDate) renderSlots();
-    renderMyBookings();
-    renderAllBookings();
-    updateStats();
-  }, err => {
-    console.error('Firestore 오류:', err);
-    showToast('⚠️ 데이터 로드 실패: ' + err.message);
+
+document.getElementById('name-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('name-btn').click();
+});
+
+document.getElementById('header-name').addEventListener('click', () => {
+  document.getElementById('name-input').value = userName;
+  document.getElementById('modal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('name-input').focus(), 100);
+});
+
+// 탭
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    if (tab.dataset.tab === 'mine') renderMine();
   });
-}
- 
-// ─── 달력 ───
-function changeMonth(dir) {
-  cMonth += dir;
-  if (cMonth < 0) { cMonth = 11; cYear--; }
-  if (cMonth > 11) { cMonth = 0; cYear++; }
+});
+
+// Firebase 실시간 구독
+const q = query(collection(db, 'bookings'), orderBy('createdAt', 'asc'));
+onSnapshot(q, snapshot => {
+  allBookings = {};
+  snapshot.forEach(d => {
+    const data = d.data();
+    if (!allBookings[data.date]) allBookings[data.date] = {};
+    allBookings[data.date][data.slot] = { name: data.name, docId: d.id };
+  });
   renderCal();
-}
- 
+  if (selDate) renderSlots();
+  renderMine();
+}, err => {
+  showToast('⚠️ 연결 오류: ' + err.message);
+});
+
+// 달력
+document.getElementById('prev-btn').addEventListener('click', () => {
+  cMonth--; if (cMonth < 0) { cMonth = 11; cYear--; } renderCal();
+});
+document.getElementById('next-btn').addEventListener('click', () => {
+  cMonth++; if (cMonth > 11) { cMonth = 0; cYear++; } renderCal();
+});
+
 function renderCal() {
-  const label = new Date(cYear, cMonth, 1).toLocaleDateString('ko-KR', {year:'numeric', month:'long'});
-  document.getElementById('cal-month').textContent = label;
+  document.getElementById('cal-month').textContent =
+    new Date(cYear, cMonth, 1).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' });
+
   const grid = document.getElementById('cal-grid');
   grid.innerHTML = '';
   ['일','월','화','수','목','금','토'].forEach(d => {
-    const el = document.createElement('div'); el.className = 'cal-day-label'; el.textContent = d; grid.appendChild(el);
+    const el = document.createElement('div'); el.className = 'cal-lbl'; el.textContent = d; grid.appendChild(el);
   });
-  const first = new Date(cYear, cMonth, 1).getDay();
-  const days = new Date(cYear, cMonth+1, 0).getDate();
-  for (let i=0; i<first; i++) { const el=document.createElement('div'); el.className='cal-cell empty'; grid.appendChild(el); }
-  for (let d=1; d<=days; d++) {
-    const el = document.createElement('div'); el.className = 'cal-cell'; el.textContent = d;
-    const date = new Date(cYear, cMonth, d);
-    const key = dk(date);
-    const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const firstDay = new Date(cYear, cMonth, 1).getDay();
+  const daysInMonth = new Date(cYear, cMonth + 1, 0).getDate();
+  const todayKey = dk(today.getFullYear(), today.getMonth(), today.getDate());
+
+  for (let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div'); el.className = 'cal-cell empty'; grid.appendChild(el);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = dk(cYear, cMonth, d);
+    const isPast = new Date(cYear, cMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const el = document.createElement('div');
+    el.className = 'cal-cell';
+    el.textContent = d;
     if (isPast) {
       el.classList.add('past');
     } else {
-      if (d===today.getDate() && cMonth===today.getMonth() && cYear===today.getFullYear()) el.classList.add('today');
-      if (allBookings[key] && Object.keys(allBookings[key]).length > 0) el.classList.add('has-booking');
-      if (selDate===key) el.classList.add('selected');
+      if (key === todayKey) el.classList.add('today');
+      if (key === selDate) el.classList.add('selected');
+      if (allBookings[key] && Object.keys(allBookings[key]).length > 0) el.classList.add('has-dot');
       el.addEventListener('click', () => selectDate(key, d));
     }
     grid.appendChild(el);
   }
 }
- 
+
 function selectDate(key, d) {
-  selDate = key;
-  selSlot = null;
+  selDate = key; selSlot = null;
   renderCal();
-  const label = new Date(cYear, cMonth, d).toLocaleDateString('ko-KR', {month:'long', day:'numeric', weekday:'short'});
-  document.getElementById('selected-date-label').textContent = label;
+  document.getElementById('date-heading').textContent =
+    new Date(cYear, cMonth, d).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
   renderSlots();
   updateBtn();
 }
- 
-// ─── 시간 슬롯 ───
+
 function renderSlots() {
-  const wrap = document.getElementById('slots-container');
+  const wrap = document.getElementById('slots-wrap');
   wrap.innerHTML = '';
   if (!selDate) return;
   const dayB = allBookings[selDate] || {};
+
   SLOTS.forEach((label, i) => {
-    const el = document.createElement('div'); el.className = 'slot';
     const entry = dayB[i];
-    const isMine = entry && entry.uid === currentUser?.uid;
-    const isBooked = !!entry;
-    let badge = '';
-    if (isMine) {
-      el.classList.add('my-slot');
-      badge = `<span class="slot-badge badge-mine">내 예약</span>`;
-    } else if (isBooked) {
-      el.classList.add('booked');
-      badge = `<span class="slot-badge badge-booked">${entry.user}</span>`;
-    } else {
-      if (selSlot === i) {
-        el.classList.add('selected');
-        badge = `<span class="slot-badge badge-sel">선택됨</span>`;
-      } else {
-        badge = `<span class="slot-badge badge-free">예약 가능</span>`;
-      }
-      el.addEventListener('click', () => {
-        selSlot = i;
-        renderSlots();
-        updateBtn();
-      });
+    const isMine = entry && entry.name === userName;
+    const isBooked = !!entry && !isMine;
+    const isSelected = selSlot === i;
+
+    const el = document.createElement('div');
+    el.className = 'slot';
+
+    let bc, bt;
+    if (isMine) { el.classList.add('mine'); bc = 'b-mine'; bt = '내 예약'; }
+    else if (isBooked) { el.classList.add('booked'); bc = 'b-booked'; bt = entry.name; }
+    else if (isSelected) { el.classList.add('selected'); bc = 'b-sel'; bt = '선택됨'; }
+    else { bc = 'b-free'; bt = '예약 가능'; }
+
+    el.innerHTML = `<span class="slot-time">${label}</span><span class="slot-badge ${bc}">${bt}</span>`;
+
+    if (!isMine && !isBooked) {
+      el.addEventListener('click', () => { selSlot = i; renderSlots(); updateBtn(); });
     }
-    el.innerHTML = `<span class="slot-time">${label}</span>${badge}`;
     wrap.appendChild(el);
   });
 }
- 
+
 function updateBtn() {
   const btn = document.getElementById('book-btn');
   if (selDate && selSlot !== null) {
@@ -496,73 +448,59 @@ function updateBtn() {
     btn.textContent = '날짜와 시간을 선택하세요';
   }
 }
- 
-// ─── 예약 저장 (핵심 함수) ───
-async function makeBooking() {
-  if (!selDate || selSlot === null || !currentUser) {
-    showToast('❌ 날짜, 시간, 로그인 확인해주세요');
-    return;
-  }
+
+// 예약 버튼
+document.getElementById('book-btn').addEventListener('click', async () => {
+  if (!userName) { checkName(); return; }
+  if (!selDate || selSlot === null) return;
+
   const btn = document.getElementById('book-btn');
   btn.disabled = true;
   btn.textContent = '예약 중...';
+
   try {
-    const docId = `${selDate}_${selSlot}`;
+    const docId = `${selDate}_${String(selSlot).padStart(3,'0')}`;
     await setDoc(doc(db, 'bookings', docId), {
       date: selDate,
       slot: selSlot,
       slotLabel: SLOTS[selSlot],
-      uid: currentUser.uid,
-      userName: currentUser.displayName || currentUser.email,
+      name: userName,
       createdAt: new Date().toISOString()
     });
-    const dateLabel = new Date(selDate + 'T00:00:00').toLocaleDateString('ko-KR', {month:'long', day:'numeric'});
-    addNoti('✅', `${dateLabel} ${SLOTS[selSlot]} 예약 완료`);
-    showToast('🎉 예약이 완료됐어요!');
+    showToast('🎉 예약 완료!');
     selSlot = null;
     updateBtn();
-  } catch(e) {
+  } catch (e) {
     console.error('예약 오류:', e);
     showToast('❌ 예약 실패: ' + e.message);
     updateBtn();
   }
-}
- 
-// ─── 예약 취소 ───
-async function cancelBooking(docId, dateLabel, slotLabel) {
-  if (!confirm(`${dateLabel} ${slotLabel} 예약을 취소할까요?`)) return;
-  try {
-    await deleteDoc(doc(db, 'bookings', docId));
-    addNoti('❌', `${dateLabel} ${slotLabel} 예약 취소`);
-    showToast('예약이 취소됐어요.');
-  } catch(e) {
-    console.error('취소 오류:', e);
-    showToast('❌ 취소 실패: ' + e.message);
-  }
-}
- 
-// ─── 내 예약 목록 ───
-function renderMyBookings() {
-  const el = document.getElementById('my-bookings-list');
+});
+
+// 내 예약
+function renderMine() {
+  const el = document.getElementById('mine-list');
+  if (!userName) { el.innerHTML = '<div class="empty">이름을 먼저 입력해주세요</div>'; return; }
+
   const mine = [];
   Object.entries(allBookings).forEach(([date, slots]) => {
     Object.entries(slots).forEach(([si, entry]) => {
-      if (entry.uid === currentUser?.uid) {
-        mine.push({ date, si: +si, slotLabel: SLOTS[+si], docId: entry.docId });
-      }
+      if (entry.name === userName) mine.push({ date, si: +si, slotLabel: SLOTS[+si], docId: entry.docId });
     });
   });
-  mine.sort((a,b) => a.date.localeCompare(b.date) || a.si - b.si);
-  if (!mine.length) { el.innerHTML = '<div class="empty-msg">예약 내역이 없어요</div>'; return; }
+  mine.sort((a, b) => a.date.localeCompare(b.date) || a.si - b.si);
+
+  if (!mine.length) { el.innerHTML = '<div class="empty">예약 내역이 없어요</div>'; return; }
+
   el.innerHTML = '';
   mine.forEach(m => {
-    const dateLabel = new Date(m.date + 'T00:00:00').toLocaleDateString('ko-KR', {month:'long', day:'numeric', weekday:'short'});
+    const dateLabel = new Date(m.date + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
     const item = document.createElement('div');
-    item.className = 'booking-item';
+    item.className = 'mine-item';
     item.innerHTML = `
-      <div class="booking-info">
-        <div class="booking-date">${dateLabel}</div>
-        <div class="booking-time">${m.slotLabel} · 연습실</div>
+      <div>
+        <div class="mine-date">${dateLabel}</div>
+        <div class="mine-time">${m.slotLabel}</div>
       </div>
       <button class="cancel-btn">취소</button>
     `;
@@ -570,59 +508,20 @@ function renderMyBookings() {
     el.appendChild(item);
   });
 }
- 
-// ─── 관리자 통계 ───
-function updateStats() {
-  let total = 0, todayCount = 0, users = new Set();
-  const todayKey = dk(today);
-  Object.entries(allBookings).forEach(([date, slots]) => {
-    Object.values(slots).forEach(entry => {
-      total++; users.add(entry.uid);
-      if (date === todayKey) todayCount++;
-    });
-  });
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-hours').textContent = (total * 0.5).toFixed(1) + 'h';
-  document.getElementById('stat-today').textContent = todayCount;
-  document.getElementById('stat-users').textContent = users.size;
+
+async function cancelBooking(docId, dateLabel, slotLabel) {
+  if (!confirm(`${dateLabel} ${slotLabel}\n예약을 취소할까요?`)) return;
+  try {
+    await deleteDoc(doc(db, 'bookings', docId));
+    showToast('예약이 취소됐어요');
+  } catch (e) {
+    showToast('❌ 취소 실패: ' + e.message);
+  }
 }
- 
-function renderAllBookings() {
-  const el = document.getElementById('all-bookings-list');
-  const all = [];
-  Object.entries(allBookings).forEach(([date, slots]) => {
-    Object.entries(slots).forEach(([si, entry]) => {
-      all.push({ date, si: +si, slotLabel: SLOTS[+si], ...entry });
-    });
-  });
-  all.sort((a,b) => a.date.localeCompare(b.date) || a.si - b.si);
-  if (!all.length) { el.innerHTML = '<div class="empty-msg">예약 내역이 없어요</div>'; return; }
-  el.innerHTML = all.map(a => {
-    const dateLabel = new Date(a.date + 'T00:00:00').toLocaleDateString('ko-KR', {month:'long', day:'numeric', weekday:'short'});
-    return `<div class="admin-booking-item">
-      <div class="admin-booking-row">
-        <div class="admin-booking-name">${a.user}</div>
-        <div style="font-size:11px;color:#aaa;">${dateLabel}</div>
-      </div>
-      <div class="admin-booking-detail">${a.slotLabel}</div>
-    </div>`;
-  }).join('');
-}
- 
-// ─── 알림 ───
-function addNoti(icon, text) {
-  const now = new Date().toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
-  notiItems.unshift({ icon, text, time: now });
-  renderNoti();
-}
- 
-function renderNoti() {
-  const el = document.getElementById('noti-list');
-  if (!notiItems.length) { el.innerHTML = '<div class="empty-msg">알림이 없습니다</div>'; return; }
-  el.innerHTML = notiItems.map(n =>
-    `<div class="noti-item"><div class="noti-icon">${n.icon}</div><div><div class="noti-text">${n.text}</div><div class="noti-time">카카오 알림톡 · ${n.time}</div></div></div>`
-  ).join('');
-}
+
+// 시작
+checkName();
+renderCal();
 </script>
 </body>
 </html>
